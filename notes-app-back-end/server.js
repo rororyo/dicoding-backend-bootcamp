@@ -1,9 +1,10 @@
 import Hapi from "@hapi/hapi";
 import routes from "./routes.js";
-
+import env from 'dotenv'
+env.config()
 const init = async () => {
   const server = Hapi.Server({
-    port: 5000,
+    port: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
     host: "localhost",
     routes: {
       cors: {
