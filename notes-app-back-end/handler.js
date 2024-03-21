@@ -19,17 +19,26 @@ function getAllNotes(request, h) {
 function getNoteById(request, h) {
     try {
         const { id } = request.params;
-        const note = notes.find(n => n.id === id) || {};
-        return h.response({
-            status: "success",
-            data: { note },
-        }).code(200);
+        const note = notes.find(n => n.id === id);
+        if(note){
+            return h.response({
+                status: "success",
+                data: { note },
+            }).code(200).type("application/json");
+        }
+        else{
+            return h.response({
+                status: "fail",
+                message: "Catatan tidak ditemukan",
+            }).code(404).type("application/json");
+        }
+
     } catch (err) {
         // Handle errors here
         return h.response({
             status: "fail",
             message: "Catatan tidak ditemukan",
-        }).code(404);
+        }).code(404).type("application/json");
     }
 }
 
@@ -74,7 +83,7 @@ function editNote(req, h) {
             return h.response({
                 status: "fail",
                 message: "Catatan tidak ditemukan",
-            }).code(404);
+            }).code(404).type("application/json");
         }
         notes[index] = {
             ...notes[index],
@@ -86,13 +95,13 @@ function editNote(req, h) {
         return h.response({
             status: "success",
             message: "Catatan berhasil diperbarui",
-        }).code(200);
+        }).code(200).type("application/json");
     } catch (err) {
         // Handle errors here
         return h.response({
             status: "fail",
             message: "Terjadi kesalahan dalam mengupdate catatan",
-        }).code(500);
+        }).code(500).type("application/json");
     }
 }
 
@@ -105,20 +114,20 @@ function deleteNote(req, h) {
             return h.response({
                 status: "fail",
                 message: "Catatan gagal dihapus. Id catatan tidak ditemukan",
-            }).code(404);
+            }).code(404).type("application/json");
         } else {
             notes.splice(index, 1);
             return h.response({
                 status: "success",
                 message: "Catatan berhasil dihapus",
-            }).code(200);
+            }).code(200).type("application/json");
         }
     } catch (err) {
         // Handle errors here
         return h.response({
             status: "fail",
             message: "Catatan gagal dihapus. Terjadi kesalahan pada server",
-        }).code(500);
+        }).code(500).type("application/json");
     }
 }
 
